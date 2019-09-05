@@ -1,12 +1,24 @@
+- name: check installed Stack
+  command: type stack
+  register: stack_check
+  ignore_errors: true
+
+- name: apt update
+  become: yes
+  apt:
+    update_cache: yes
+  when: stack_check is failed
+
 - name: install Stack
   command: bash -l -c 'curl -sSL https://get.haskellstack.org/ | sh'
+  when: stack_check is failed
 
 - name: clone HaskellR
   git:
     repo: "{{haskellr.repo}}"
     dest: "{{haskellr.dir}}"
     version: "{{haskellr.version}}"
-    force: yes
+    force: no
 
 - name: install HaskellR
   command: bash -l -c 'stack install'
