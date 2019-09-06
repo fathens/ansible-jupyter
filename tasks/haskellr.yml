@@ -1,5 +1,5 @@
 - name: check installed Stack
-  command: type stack
+  command: bash -l -c 'type stack'
   register: stack_check
   ignore_errors: true
 
