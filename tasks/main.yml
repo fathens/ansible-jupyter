@@ -1,6 +1,9 @@
+- include_tasks: github_ssh.yml
+
 - name: get jupyter data dir
   command: bash -l -c 'jupyter --data-dir'
   register: jupyter_data_dir
+
 - name: clone jupyter-vim-binding
   git:
     repo: "{{ jupyter_vim_binding_repo }}"
@@ -10,25 +13,23 @@
   command: "bash -l -c 'jupyter nbextension enable {{ item }}'"
   with_items: "{{ jupyter_extentions }}"
 
-- name: install kernels
-  include_tasks: "{{ item }}".yml
-  with_items: "{{ jupyter_kernels }}"
-
 - name: clone storage of jupyter notebooks
   git:
-    repo: "{{ jupyter_notebook_storage.repo }}"
-    dest: "{{ jupyter_notebook_storage.dir }}"
+    repo: "{{ jupyter_notebook_storage_repo }}"
+    dest: "{{ jupyter_notebook_storage_dir }}"
     update: no
     force: no
+  when: jupyter_notebook_storage_repo is defined
 
 - name: setup git config to clean ipynb
   blockinfile:
-    path: "{{ jupyter_notebook_storage.dir }}/.git/{{ item.file }}"
+    path: "{{ jupyter_notebook_storage_dir }}/.git/{{ item.file }}"
     create: yes
     block: |
       {{ item.content }}
   with_items:
-  - "{{ jupyter_notebook_gitconfig }}"
+  - "{{ jupyter_notebook_storage_gitconfig }}"
+  when: jupyter_notebook_storage_repo is defined
 
 - name: put jupyter's run.sh
   with_items:
@@ -41,6 +42,10 @@
     src: "{{ item.f }}.j2"
     dest: "{{ item.d }}"
     mode: "{{ item.m|default('0644') }}"
+
+- name: install kernels
+  include_tasks: "{{ item }}.yml"
+  with_items: "{{ jupyter_kernels }}"
 
 - name: put jupyter.service
   become: yes

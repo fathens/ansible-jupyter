@@ -1,0 +1,36 @@
+- debug: msg=FOUND
+  when: lookup('env', 'GITHUB_ACCESS_TOKEN') == None
+
+- name: generate ssh key for github
+  openssh_keypair:
+    path: "{{ ansible_env.HOME }}/.ssh/{{ github_sshkey_name }}"
+  register: github_ssh
+  when: lookup('env', 'GITHUB_ACCESS_TOKEN') == None
+
+- name: register github ssh key
+  local_action:
+    module: github_key
+    name: "Ansible-{{ ansible_machine_id }}"
+    token: "{{ lookup('env','GITHUB_ACCESS_TOKEN') }}"
+    pubkey: "{{ github_ssh.public_key }}"
+  when: lookup('env', 'GITHUB_ACCESS_TOKEN') == None
+
+- name: add .ssh/config
+  blockinfile:
+    path: "{{ ansible_env.HOME }}/.ssh/config"
+    create: yes
+    block: |
+      Host github github.com
+        HostName github.com
+        Identityfile ~/.ssh/{{ github_sshkey_name }}
+        User git
+  when: lookup('env', 'GITHUB_ACCESS_TOKEN') == None
+
+- name: add .ssh/known_hosts
+  blockinfile:
+    path: "{{ ansible_env.HOME }}/.ssh/known_hosts"
+    create: yes
+    block: |
+      |1|Q0z4kN42K8Hi7ajGIszSxMQY0WA=|ebzX7l7Mf9nPdZgTj6fB2wznrm8= ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==
+      |1|n0Ljrq8Im6PbOqwQAadRxnuIQdk=|qNfdfgSs69Ea1ohYofzlC8+fDKM= ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==
+  when: lookup('env', 'GITHUB_ACCESS_TOKEN') == None

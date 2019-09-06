@@ -31,6 +31,7 @@ def post_save(model, os_path, contents_manager):
 c.FileContentsManager.post_save_hook = post_save
 
 c.NotebookApp.ip = '0.0.0.0'
+c.NotebookApp.portInt = "{{ jupyter_port }}"
 c.NotebookApp.open_browser = False
 c.NotebookApp.password_required = False
 c.NotebookApp.token = ''
