@@ -1,0 +1,7 @@
+packages:
+- automake
+- build-essential
+- gnuplot
+- libzmq3-dev
+- texinfo
+- texlive-xetex

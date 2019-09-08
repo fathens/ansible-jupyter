@@ -7,19 +7,21 @@ galaxy_info:
     - MIT
   min_ansible_version: 2.8
   platforms:
-    - name: Ubuntu
-      versions:
-        - bionic
+  - name: Ubuntu
+    versions:
+    - bionic
   galaxy_tags:
-    - development
+  - development
 
 dependencies:
-  - role: andrewrothstein.miniconda
-    version: v5.2.7
-  - role: andrewrothstein.conda-env
-    version: v2.0.7
-    vars:
-      conda_env_name: jupyter
-      conda_env_environment: conda-env.yml
-      conda_env_activate_for_login_shell: true
-      conda_env_update_if_present: true
+- role: ansible-github_ssh
+  version: master
+- role: andrewrothstein.miniconda
+  version: v5.2.7
+- role: andrewrothstein.conda-env
+  version: v2.0.7
+  vars:
+    conda_env_name: jupyter
+    conda_env_environment: conda-env.yml
+    conda_env_activate_for_login_shell: true
+    conda_env_update_if_present: true
