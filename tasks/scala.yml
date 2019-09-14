@@ -5,10 +5,16 @@
   args:
     creates: "{{ ansible_env.HOME }}/.sdkman"
 
-- name: install Java
+- name: update SDK_MAN
+  command: bash -il -c "sdk update"
+
+- name: "install Java {{ java_version }}"
   command: bash -il -c "sdk install java {{ java_version }}"
   args:
     creates: "{{ ansible_env.HOME }}/.sdkman/candidates/java/{{ java_version }}"
+
+- name: "set Java {{ java_version }} as default"
+  command: bash -il -c "sdk default java {{ java_version }}"
 
 - name: check coursier
   command: bash -il -c 'type coursier'
