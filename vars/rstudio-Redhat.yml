@@ -1,0 +1,9 @@
+packages:
+- R
+- libcurl-devel
+- openssl-devel
+- libxml2-devel
+
+rstudio_server:
+  url: https://download2.rstudio.org/server/centos6/x86_64/rstudio-server-rhel-1.2.1335-x86_64.rpm
+  checksum: md5:da696c9823eb1c044f04adf75f722b64
