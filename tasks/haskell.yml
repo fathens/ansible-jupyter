@@ -1,0 +1,53 @@
+- include_vars: haskell.yml
+- include_vars: '{{ item }}'
+  with_first_found:
+  - files:
+    - 'haskell-{{ ansible_distribution }}-{{ ansible_distribution_release }}.yml'
+    - 'haskell-{{ ansible_distribution }}.yml'
+    - 'haskell-{{ ansible_os_family }}.yml'
+    errors: ignore
+    paths:
+    - '{{ role_path }}/vars'
+
+- name: install packages
+  become: yes
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ packages }}"
+
+- name: check installed Stack
+  command: bash -l -c 'type stack'
+  register: stack_check
+  ignore_errors: true
+
+- name: install Stack
+  command: bash -l -c 'curl -sSL https://get.haskellstack.org/ | sh'
+  when: stack_check is failed
+
+- name: clone IHaskell
+  git:
+    repo: "{{ ihaskell.repo }}"
+    dest: "{{ ihaskell.dir }}"
+    version: "{{ ihaskell.version }}"
+    force: no
+
+- name: install IHaskell
+  command: bash -l -c 'stack install --fast'
+  args:
+    chdir: "{{ ihaskell.dir }}"
+    creates: "{{ ansible_env.HOME }}/.local/bin/ihaskell"
+
+- name: install IHaskell to Jupyter
+  command: bash -l -c 'ihaskell install --stack'
+  args:
+    creates: "{{ ansible_env.HOME }}/.ihaskell"
+
+- name: install stack packages
+  command: "bash -l -c 'stack install {{ item }}'"
+  with_items: "{{ stack_deps }}"
+
+- name: initialize hoogle
+  command: bash -l -c 'hoogle generate'
+  args:
+    creates: "{{ ansible_env.HOME }}/.hoogle"

@@ -1,6 +1,23 @@
+- include_tasks: '{{ item }}'
+  with_first_found:
+  - files:
+    - '_initialize-{{ ansible_distribution }}-{{ ansible_distribution_release }}.yml'
+    - '_initialize-{{ ansible_distribution }}.yml'
+    - '_initialize-{{ ansible_os_family }}.yml'
+    errors: ignore
+    paths:
+    - '{{ role_path }}/tasks'
+
 - name: get jupyter data dir
   command: bash -l -c 'jupyter --data-dir'
   register: jupyter_data_dir
+
+- name: install kernels
+  include_tasks: "{{ kernel }}.yml"
+  with_items: "{{ jupyter_kernels }}"
+  loop_control:
+    loop_var: kernel
+
 - name: clone jupyter-vim-binding
   git:
     repo: "{{ jupyter_vim_binding_repo }}"
@@ -10,25 +27,23 @@
   command: "bash -l -c 'jupyter nbextension enable {{ item }}'"
   with_items: "{{ jupyter_extentions }}"
 
-- name: install kernels
-  include_tasks: "{{ item }}".yml
-  with_items: "{{ jupyter_kernels }}"
-
 - name: clone storage of jupyter notebooks
   git:
-    repo: "{{ jupyter_notebook_storage.repo }}"
-    dest: "{{ jupyter_notebook_storage.dir }}"
+    repo: "{{ jupyter_notebook_storage_repo }}"
+    dest: "{{ jupyter_notebook_storage_dir }}"
     update: no
     force: no
+  when: jupyter_notebook_storage_repo is defined
 
 - name: setup git config to clean ipynb
   blockinfile:
-    path: "{{ jupyter_notebook_storage.dir }}/.git/{{ item.file }}"
+    path: "{{ jupyter_notebook_storage_dir }}/.git/{{ item.file }}"
     create: yes
     block: |
       {{ item.content }}
   with_items:
-  - "{{ jupyter_notebook_gitconfig }}"
+  - "{{ jupyter_notebook_storage_gitconfig }}"
+  when: jupyter_notebook_storage_repo is defined
 
 - name: put jupyter's run.sh
   with_items:
@@ -58,3 +73,13 @@
     systemctl enable jupyter.service
     systemctl daemon-reload
     systemctl restart jupyter.service
+
+- include_tasks: '{{ item }}'
+  with_first_found:
+  - files:
+    - '_tidyup-{{ ansible_distribution }}-{{ ansible_distribution_release }}.yml'
+    - '_tidyup-{{ ansible_distribution }}.yml'
+    - '_tidyup-{{ ansible_os_family }}.yml'
+    errors: ignore
+    paths:
+    - '{{ role_path }}/tasks'

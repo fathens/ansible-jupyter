@@ -1,0 +1,10 @@
+packages:
+- build-essential
+- libblas-dev
+- libcairo2-dev
+- libgmp-dev
+- liblapack-dev
+- libmagic-dev
+- libpango1.0-dev
+- libtinfo-dev
+- libzmq3-dev

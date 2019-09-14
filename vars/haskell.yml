@@ -1,0 +1,21 @@
+ihaskell:
+  repo: git@github.com:gibiansky/IHaskell.git
+  version: master
+  dir: "{{ansible_env.HOME}}/devel/workspace/IHaskell"
+
+stack_deps:
+- apply-refact
+- binary
+- csv-conduit
+- hasktags
+- hindent
+- hlint
+- hmatrix
+- hoogle
+- http-client
+- intero
+- lens
+- mwc-random
+- regex
+- stylish-haskell
+- zlib
