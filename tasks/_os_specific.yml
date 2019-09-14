@@ -1,0 +1,9 @@
+- include_tasks: '{{ item }}'
+  with_first_found:
+  - files:
+    - '{{ base_task_name }}-{{ ansible_distribution }}-{{ ansible_distribution_release }}.yml'
+    - '{{ base_task_name }}-{{ ansible_distribution }}.yml'
+    - '{{ base_task_name }}-{{ ansible_os_family }}.yml'
+    skip: true
+    paths:
+    - '{{ role_path }}/tasks'
