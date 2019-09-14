@@ -45,6 +45,17 @@
   - "{{ jupyter_notebook_storage_gitconfig }}"
   when: jupyter_notebook_storage_repo is defined
 
+- name: create jupyter storage
+  file:
+    path: "{{ jupyter_notebook_storage_dir }}"
+    state: directory
+  when: jupyter_notebook_storage_repo is not defined
+
+- name: create jupyter's directory
+  file:
+    path: "{{ jupyter_notebook_dir }}"
+    state: directory
+
 - name: put jupyter's run.sh
   with_items:
     - f: jupyter-run.sh
