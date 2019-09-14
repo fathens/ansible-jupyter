@@ -17,17 +17,17 @@
   command: bash -il -c "sdk default java {{ java_version }}"
 
 - name: check coursier
-  command: bash -il -c 'type coursier'
+  stat:
+    path: "{{ coursier.file }}"
   register: check_coursier
-  ignore_errors: true
 
 - name: install coursier
+  when: not check_coursier.stat.executable
   become: yes
   command: bash -il -c "{{ item }}"
-  with_items:
+  loop:
   - "curl -Lo {{ coursier.file }} {{ coursier.url }}"
   - "chmod +x {{ coursier.file }}"
-  when: check_coursier is failed
 
 - include_tasks: scala_almond.yml
   loop: "{{ scala_versions }}"
