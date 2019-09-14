@@ -1,20 +1,4 @@
-- include_vars: haskell.yml
-- include_vars: '{{ item }}'
-  with_first_found:
-  - files:
-    - 'haskell-{{ ansible_distribution }}-{{ ansible_distribution_release }}.yml'
-    - 'haskell-{{ ansible_distribution }}.yml'
-    - 'haskell-{{ ansible_os_family }}.yml'
-    errors: ignore
-    paths:
-    - '{{ role_path }}/vars'
-
-- name: install packages
-  become: yes
-  package:
-    name: "{{ item }}"
-    state: present
-  with_items: "{{ packages }}"
+- include_tasks: _init_each.yml
 
 - name: check installed Stack
   command: bash -l -c 'type stack'
