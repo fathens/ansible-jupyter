@@ -1,7 +1,6 @@
 workdir: "{{ ansible_env.HOME }}/devel/workspace"
 
 jupyter_port: 8888
-rstudio_port: 8787
 
 jupyter_vim_binding_repo: "https://github.com/lambdalisue/jupyter-vim-binding"
 
