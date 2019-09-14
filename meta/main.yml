@@ -2,7 +2,7 @@
 galaxy_info:
   author: 沢谷 邦夫
   description: installs Jupyter Notebook
-  company: f.athens
+  company: fathens
   license:
     - MIT
   min_ansible_version: 2.8
