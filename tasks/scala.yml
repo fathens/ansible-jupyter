@@ -22,7 +22,7 @@
   register: check_coursier
 
 - name: install coursier
-  when: not check_coursier.stat.executable
+  when: not check_coursier.stat.exists or not check_coursier.stat.executable
   become: yes
   command: bash -il -c "{{ item }}"
   loop:

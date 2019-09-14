@@ -1,4 +1,6 @@
-- name: Run "apt-get update"
+- name: apt install
   become: yes
   apt:
+    name:
+    - jq
     update_cache: yes
