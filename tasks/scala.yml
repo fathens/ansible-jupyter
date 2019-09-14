@@ -1,0 +1,35 @@
+- include_tasks: _init_each.yml
+
+- name: install SDK_MAN
+  command: bash -il -c 'curl -s "https://get.sdkman.io" | bash'
+  args:
+    creates: "{{ ansible_env.HOME }}/.sdkman"
+
+- name: update SDK_MAN
+  command: bash -il -c "sdk update"
+
+- name: "install Java {{ java_version }}"
+  command: bash -il -c "sdk install java {{ java_version }}"
+  args:
+    creates: "{{ ansible_env.HOME }}/.sdkman/candidates/java/{{ java_version }}"
+
+- name: "set Java {{ java_version }} as default"
+  command: bash -il -c "sdk default java {{ java_version }}"
+
+- name: check coursier
+  stat:
+    path: "{{ coursier.file }}"
+  register: check_coursier
+
+- name: install coursier
+  when: not check_coursier.stat.exists or not check_coursier.stat.executable
+  become: yes
+  command: bash -il -c "{{ item }}"
+  loop:
+  - "curl -Lo {{ coursier.file }} {{ coursier.url }}"
+  - "chmod +x {{ coursier.file }}"
+
+- include_tasks: scala_almond.yml
+  loop: "{{ scala_versions }}"
+  loop_control:
+    loop_var: version

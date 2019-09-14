@@ -1,0 +1,16 @@
+- name: yum EPEL and update
+  become: yes
+  yum:
+    name:
+    - epel-release
+    state: latest
+    update_cache: yes
+
+- name: install yum packages
+  become: yes
+  yum:
+    name:
+    - git
+    - jq
+    state: latest
+    update_cache: yes

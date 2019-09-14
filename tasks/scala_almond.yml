@@ -1,0 +1,18 @@
+- set_fact:
+    kernel_id: "scala-{{ version }}"
+    almond_installer: "{{ ansible_env.HOME }}/almond-scala-{{ version }}"
+
+- name: install almond installer "{{ almond_installer }}"
+  command: bash -il -c "{{ coursier.file }} bootstrap -r jitpack -i user -I user:sh.almond:scala-kernel-api_{{ version }}:{{ almond_version }} sh.almond:scala-kernel_{{ version }}:{{ almond_version }} --sources --default=true -o {{ almond_installer }}"
+  args:
+    creates: "{{ ansible_env.HOME }}/.local/share/jupyter/kernels/{{ kernel_id }}"
+
+- name: install scala kernel "{{ kernel_id }}"
+  command: bash -il -c "{{ almond_installer }} --install --id {{ kernel_id }} --display-name 'Scala ({{ version }})'"
+  args:
+    creates: "{{ ansible_env.HOME }}/.local/share/jupyter/kernels/{{ kernel_id }}"
+
+- name: remove almond installer "{{ almond_installer }}"
+  file:
+    path: "{{ almond_installer }}"
+    state: absent
