@@ -14,7 +14,7 @@ galaxy_info:
   - development
 
 dependencies:
-- role: ansible-github_ssh
+- role: sawatani.github_ssh
   version: master
 - role: andrewrothstein.miniconda
   version: v5.2.7
