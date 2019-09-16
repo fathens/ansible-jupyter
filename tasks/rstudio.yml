@@ -1,19 +1,19 @@
 - include_tasks: _init_each.yml
 
-- name: install R libraries
-  become: yes
-  command: bash -l -c "Rscript -e 'install.packages(\"{{ item }}\")'"
-  loop: "{{ r_libralies }}"
-
 - name: add user for RStudio
   become: yes
   user:
     name: "{{ rstudio_client.username }}"
     password: "{{ rstudio_client.password | password_hash('sha512') }}"
 
-- name: install IRkernel
-  become: yes
-  command: bash -l -c "Rscript -e 'install.packages(\"IRkernel\")'"
+- set_fact:
+    r_libraries: "{{ r_libraries }} + ['IRkernel']"
+
+- set_fact:
+    r_libraries_quoted: "c(\\\"{{ r_libraries | join('\\\", \\\"') }}\\\")"
+
+- name: install R libraries
+  command: bash -il -c "sudo Rscript -e 'install.packages({{ r_libraries_quoted }})'"
 
 - name: install IR to jupyter
-  command: bash -l -c "Rscript -e 'IRkernel::installspec()'"
+  command: bash -il -c "Rscript -e 'IRkernel::installspec()'"

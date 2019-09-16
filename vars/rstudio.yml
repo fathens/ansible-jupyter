@@ -1,9 +1,7 @@
-rstudio_port: 8787
-
 rstudio_client:
   username: rstudio
   password: rstudio
 
-r_libralies:
+r_libraries:
 - tidyverse
 - cowplot
