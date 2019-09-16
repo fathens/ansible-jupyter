@@ -10,7 +10,7 @@
 
 - name: install RStudio
   become: yes
-  command: bash -l -c "yes | gdebi {{ rstemp.path }}"
+  command: gdebi -n "{{ rstemp.path }}"
 
 - name: remove tmp file
   file:

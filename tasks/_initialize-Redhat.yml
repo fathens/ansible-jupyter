@@ -6,11 +6,12 @@
     state: latest
     update_cache: yes
 
+- set_fact:
+    packages: "{{ packages | default([]) }} + ['git', 'jq']"
+
 - name: install yum packages
   become: yes
   yum:
-    name:
-    - git
-    - jq
+    name: "{{ packages }}"
     state: latest
     update_cache: yes

@@ -1,7 +1,3 @@
-- include_tasks: _os_specific.yml
-  vars:
-    base_task_name: _initialize
-
 - name: get jupyter data dir
   command: bash -l -c 'jupyter --data-dir'
   register: jupyter_data_dir

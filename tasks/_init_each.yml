@@ -10,13 +10,9 @@
     paths:
     - "{{ role_path }}/vars"
 
-- name: install packages
-  when: packages is defined
-  become: yes
-  package:
-    name: "{{ packages }}"
-    state: present
-    update_cache: yes
+- include_tasks: _os_specific.yml
+  vars:
+    base_task_name: _initialize
 
 - include_tasks: _os_specific.yml
   vars:
