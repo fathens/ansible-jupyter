@@ -1,15 +1,13 @@
 - name: Add apt keys
-  when: apt_keys is defined
   become: yes
   apt_key:
     keyserver: "{{ ap.value }}"
     id: "{{ ap.key }}"
-  loop: "{{ apt_keys | dict2items }}"
+  loop: "{{ apt_keys | default({}) | dict2items }}"
   loop_control:
     loop_var: ap
 
 - name: Add repos
-  when: apt_repos is defined
   become: yes
   apt_repository:
     repo: "{{ ap }}"
