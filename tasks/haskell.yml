@@ -28,8 +28,7 @@
     creates: "{{ ansible_env.HOME }}/.ihaskell"
 
 - name: install stack packages
-  command: "bash -l -c 'stack install {{ item }}'"
-  with_items: "{{ stack_deps }}"
+  command: bash -l -c "stack install {{ stack_deps | join(' ') }}"
 
 - name: initialize hoogle
   command: bash -l -c 'hoogle generate'
