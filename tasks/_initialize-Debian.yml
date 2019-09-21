@@ -1,6 +1,25 @@
+- name: Add apt keys
+  become: yes
+  apt_key:
+    keyserver: "{{ ap.value }}"
+    id: "{{ ap.key }}"
+  loop: "{{ apt_keys | default({}) | dict2items }}"
+  loop_control:
+    loop_var: ap
+
+- name: Add repos
+  become: yes
+  apt_repository:
+    repo: "{{ ap }}"
+  loop: "{{ apt_repos | default([]) }}"
+  loop_control:
+    loop_var: ap
+
+- set_fact:
+    packages: "{{ packages | default([]) }} + ['jq']"
+
 - name: apt install
   become: yes
   apt:
-    name:
-    - jq
+    name: "{{ packages }}"
     update_cache: yes

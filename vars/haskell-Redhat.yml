@@ -1,0 +1,6 @@
+packages:
+- "@Development tools"
+- lapack-devel
+- ncurses-devel
+- zeromq-devel
+- zlib-devel

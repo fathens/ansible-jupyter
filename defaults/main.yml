@@ -1,4 +1,8 @@
-workdir: "{{ ansible_env.HOME }}/devel/workspace"
+jupyter_kernels:
+- haskell
+- maxima
+- rstudio
+- scala
 
 jupyter_port: 8888
 
@@ -11,9 +15,9 @@ jupyter_extentions:
 - autosavetime/main
 - livemdpreview/livemdpreview
 
-jupyter_notebook_dir: "{{ansible_env.HOME}}/devel/Jupyter"
+jupyter_notebook_dir: "{{ ansible_env.HOME }}/devel/Jupyter"
 
-jupyter_notebook_storage_dir: "{{jupyter_notebook_dir}}/storage"
+jupyter_notebook_storage_dir: "{{ jupyter_notebook_dir }}/storage"
 
 jupyter_notebook_storage_gitconfig:
   - file: info/exclude
