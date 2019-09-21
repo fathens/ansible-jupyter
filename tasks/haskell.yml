@@ -17,7 +17,7 @@
     force: no
 
 - name: install IHaskell
-  command: bash -l -c 'stack install --fast'
+  command: bash -l -c 'stack install'
   args:
     chdir: "{{ ihaskell.dir }}"
     creates: "{{ ansible_env.HOME }}/.local/bin/ihaskell"
@@ -27,8 +27,15 @@
   args:
     creates: "{{ ansible_env.HOME }}/.ihaskell"
 
+- name: put stack.yaml
+  template:
+    src: stack.yaml.j2
+    dest: "{{ jupyter_notebook_dir }}/stack.yaml"
+
 - name: install stack packages
   command: bash -l -c "stack install {{ stack_deps | join(' ') }}"
+  args:
+    chdir: "{{ jupyter_notebook_dir }}"
 
 - name: initialize hoogle
   command: bash -l -c 'hoogle generate'
