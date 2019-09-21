@@ -18,4 +18,5 @@ stack_deps:
 - mwc-random
 - regex
 - stylish-haskell
+- yaml
 - zlib
