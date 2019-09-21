@@ -1,7 +1,7 @@
 ihaskell:
-  repo: git@github.com:gibiansky/IHaskell.git
+  repo: https://github.com/gibiansky/IHaskell.git
   version: master
-  dir: "{{ansible_env.HOME}}/devel/workspace/IHaskell"
+  dir: "{{ ansible_env.HOME }}/devel/workspace/IHaskell"
 
 stack_deps:
 - apply-refact
