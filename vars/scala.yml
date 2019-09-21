@@ -1,0 +1,11 @@
+java_version: 12.0.2-open
+
+scala_versions:
+- 2.12.10
+- 2.13.0
+
+almond_version: 0.8.1
+
+coursier:
+  url: https://git.io/coursier-cli
+  file: /usr/local/bin/coursier

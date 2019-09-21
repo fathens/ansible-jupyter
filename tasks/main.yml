@@ -1,13 +1,3 @@
-- include_tasks: '{{ item }}'
-  with_first_found:
-  - files:
-    - '_initialize-{{ ansible_distribution }}-{{ ansible_distribution_release }}.yml'
-    - '_initialize-{{ ansible_distribution }}.yml'
-    - '_initialize-{{ ansible_os_family }}.yml'
-    errors: ignore
-    paths:
-    - '{{ role_path }}/tasks'
-
 - name: get jupyter data dir
   command: bash -l -c 'jupyter --data-dir'
   register: jupyter_data_dir
@@ -17,6 +7,7 @@
   with_items: "{{ jupyter_kernels }}"
   loop_control:
     loop_var: kernel
+    label: "{{ kernel }}"
 
 - name: clone jupyter-vim-binding
   git:
@@ -44,6 +35,17 @@
   with_items:
   - "{{ jupyter_notebook_storage_gitconfig }}"
   when: jupyter_notebook_storage_repo is defined
+
+- name: create jupyter storage
+  file:
+    path: "{{ jupyter_notebook_storage_dir }}"
+    state: directory
+  when: jupyter_notebook_storage_repo is not defined
+
+- name: create jupyter's directory
+  file:
+    path: "{{ jupyter_notebook_dir }}"
+    state: directory
 
 - name: put jupyter's run.sh
   with_items:
@@ -74,12 +76,6 @@
     systemctl daemon-reload
     systemctl restart jupyter.service
 
-- include_tasks: '{{ item }}'
-  with_first_found:
-  - files:
-    - '_tidyup-{{ ansible_distribution }}-{{ ansible_distribution_release }}.yml'
-    - '_tidyup-{{ ansible_distribution }}.yml'
-    - '_tidyup-{{ ansible_os_family }}.yml'
-    errors: ignore
-    paths:
-    - '{{ role_path }}/tasks'
+- include_tasks: _os_specific.yml
+  vars:
+    base_task_name: _tidyup

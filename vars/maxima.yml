@@ -1,15 +1,15 @@
 maxima_jupyter:
-  repo: git@github.com:robert-dodier/maxima-jupyter.git
+  repo: https://github.com/robert-dodier/maxima-jupyter.git
   version: master
   dir: "{{ workdir }}/maxima-jupyter"
 
 maxima:
-  repo: git://git.code.sf.net/p/maxima/code
+  repo: https://git.code.sf.net/p/maxima/code
   version: "{{ maxima_version | default('5.43.0') }}"
   dir: "{{ workdir }}/maxima"
 
 sbcl:
-  repo: git://git.code.sf.net/p/sbcl/sbcl
+  repo: https://git.code.sf.net/p/sbcl/sbcl
   version: "{{ sbcl_version | default('sbcl-1.5.6') }}"
   dir: "{{ workdir }}/sbcl"
 

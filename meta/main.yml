@@ -2,7 +2,7 @@
 galaxy_info:
   author: 沢谷 邦夫
   description: installs Jupyter Notebook
-  company: f.athens
+  company: fathens
   license:
     - MIT
   min_ansible_version: 2.8
@@ -10,11 +10,14 @@ galaxy_info:
   - name: Ubuntu
     versions:
     - bionic
+  - name: EL
+    versions:
+    - 7
   galaxy_tags:
   - development
 
 dependencies:
-- role: ansible-github_ssh
+- role: sawatani.github_ssh
   version: master
 - role: andrewrothstein.miniconda
   version: v5.2.7

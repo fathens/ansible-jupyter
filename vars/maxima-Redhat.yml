@@ -1,0 +1,6 @@
+packages:
+- "@Development tools"
+- gnuplot
+- zeromq-devel
+- texinfo
+- texlive-xetex

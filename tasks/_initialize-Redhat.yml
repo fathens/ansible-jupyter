@@ -1,0 +1,17 @@
+- name: yum EPEL and update
+  become: yes
+  yum:
+    name:
+    - epel-release
+    state: latest
+    update_cache: yes
+
+- set_fact:
+    packages: "{{ packages | default([]) }} + ['git', 'jq']"
+
+- name: install yum packages
+  become: yes
+  yum:
+    name: "{{ packages }}"
+    state: latest
+    update_cache: yes

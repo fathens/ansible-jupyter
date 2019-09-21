@@ -1,3 +1,16 @@
+apt_keys:
+  E298A3A825C0D65DFD57CBB651716619E084DAB9: keyserver.ubuntu.com
+
+apt_repos:
+- 'deb https://cloud.r-project.org/bin/linux/ubuntu bionic-cran35/'
+
 packages:
 - gdebi-core
 - r-base
+- libcurl4-openssl-dev
+- libssl-dev
+- libxml2-dev
+
+rstudio_server:
+  url: https://download2.rstudio.org/server/bionic/amd64/rstudio-server-1.2.1335-amd64.deb
+  checksum: md5:7e84f384a87e219d20c00d8a6bccf532

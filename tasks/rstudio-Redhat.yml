@@ -1,0 +1,10 @@
+- name: download and install RStudio
+  become: yes
+  yum:
+    name: "{{ rstudio_server.url }}"
+    state: present
+
+- name: Put Rprofile
+  template:
+    src: dot.Rprofile.j2
+    dest: "{{ ansible_env.HOME }}/.Rprofile"

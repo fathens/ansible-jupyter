@@ -1,0 +1,18 @@
+- tempfile:
+    state: file
+  register: rstemp
+
+- name: download RStudio
+  get_url:
+    url: "{{ rstudio_server.url }}"
+    checksum: "{{ rstudio_server.checksum }}"
+    dest: "{{ rstemp.path }}"
+
+- name: install RStudio
+  become: yes
+  command: gdebi -n "{{ rstemp.path }}"
+
+- name: remove tmp file
+  file:
+    path: "{{ rstemp.path }}"
+    state: absent
