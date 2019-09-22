@@ -3,6 +3,8 @@ ihaskell:
   version: master
   dir: "{{ ansible_env.HOME }}/devel/workspace/IHaskell"
 
+haskell_stack_resolver: lts-14.6
+
 stack_deps:
 - apply-refact
 - binary

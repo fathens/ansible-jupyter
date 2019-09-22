@@ -2,6 +2,11 @@
   command: bash -l -c 'jupyter --data-dir'
   register: jupyter_data_dir
 
+- name: create jupyter's directory
+  file:
+    path: "{{ jupyter_notebook_dir }}"
+    state: directory
+
 - name: install kernels
   include_tasks: "{{ kernel }}.yml"
   with_items: "{{ jupyter_kernels }}"
@@ -41,11 +46,6 @@
     path: "{{ jupyter_notebook_storage_dir }}"
     state: directory
   when: jupyter_notebook_storage_repo is not defined
-
-- name: create jupyter's directory
-  file:
-    path: "{{ jupyter_notebook_dir }}"
-    state: directory
 
 - name: put jupyter's run.sh
   with_items:

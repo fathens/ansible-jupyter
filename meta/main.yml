@@ -1,5 +1,6 @@
 ---
 galaxy_info:
+  role_name: jupyter_notebook
   author: 沢谷 邦夫
   description: installs Jupyter Notebook
   company: fathens
