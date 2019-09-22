@@ -9,6 +9,14 @@
   command: bash -l -c 'curl -sSL https://get.haskellstack.org/ | sh'
   when: stack_check is failed
 
+- name: stack bash completion
+  blockinfile:
+    marker: '# {mark} ANSIBLE HASKELL-STACK MANAGED BLOCK'
+    path: "{{ ansible_env.HOME }}/.bashrc"
+    content: |
+      export PATH=/home/vagrant/.local/bin:$PATH
+      eval "$(stack --bash-completion-script stack)"
+
 - name: clone IHaskell
   git:
     repo: "{{ ihaskell.repo }}"
