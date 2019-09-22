@@ -33,11 +33,13 @@
     dest: "{{ jupyter_notebook_dir }}/stack.yaml"
 
 - name: install stack packages
-  command: bash -l -c "stack install {{ stack_deps | join(' ') }}"
+  command: bash -l -c "stack install {{ item }}"
   args:
     chdir: "{{ jupyter_notebook_dir }}"
+  loop: "{{ stack_deps }}"
 
 - name: initialize hoogle
-  command: bash -l -c 'hoogle generate'
+  command: bash -l -c 'stack exec hoogle -- generate'
   args:
+    chdir: "{{ jupyter_notebook_dir }}"
     creates: "{{ ansible_env.HOME }}/.hoogle"
