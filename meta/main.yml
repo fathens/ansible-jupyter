@@ -1,7 +1,8 @@
 ---
 galaxy_info:
+  role_name: jupyter_kernels
   author: 沢谷 邦夫
-  description: installs Jupyter Notebook
+  description: installs Jupyter Notebook and Kernels
   company: fathens
   license:
     - MIT

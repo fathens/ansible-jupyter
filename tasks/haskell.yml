@@ -9,6 +9,14 @@
   command: bash -l -c 'curl -sSL https://get.haskellstack.org/ | sh'
   when: stack_check is failed
 
+- name: stack bash completion
+  blockinfile:
+    marker: '# {mark} ANSIBLE HASKELL-STACK MANAGED BLOCK'
+    path: "{{ ansible_env.HOME }}/.bashrc"
+    content: |
+      export PATH=/home/vagrant/.local/bin:$PATH
+      eval "$(stack --bash-completion-script stack)"
+
 - name: clone IHaskell
   git:
     repo: "{{ ihaskell.repo }}"
@@ -17,7 +25,7 @@
     force: no
 
 - name: install IHaskell
-  command: bash -l -c 'stack install --fast'
+  command: bash -l -c 'stack install'
   args:
     chdir: "{{ ihaskell.dir }}"
     creates: "{{ ansible_env.HOME }}/.local/bin/ihaskell"
@@ -27,10 +35,13 @@
   args:
     creates: "{{ ansible_env.HOME }}/.ihaskell"
 
-- name: install stack packages
-  command: bash -l -c "stack install {{ stack_deps | join(' ') }}"
+- name: put stack.yaml
+  template:
+    src: stack.yaml.j2
+    dest: "{{ jupyter_notebook_dir }}/stack.yaml"
 
-- name: initialize hoogle
-  command: bash -l -c 'hoogle generate'
+- name: install stack packages
+  command: bash -l -c "stack install {{ item }}"
   args:
-    creates: "{{ ansible_env.HOME }}/.hoogle"
+    chdir: "{{ jupyter_notebook_dir }}"
+  loop: "{{ stack_deps }}"
