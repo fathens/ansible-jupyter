@@ -1,0 +1,25 @@
+- name: clone anyenv
+  git:
+    repo: "{{ anyenv.repo }}"
+    dest: "{{ anyenv.dir }}"
+    version: "{{ anyenv.version }}"
+    force: no
+
+- name: init anyenv
+  command: bash -l -c "{{ anyenv.dir }}/bin/anyenv install --force-init"
+  args:
+    creates: "{{ ansible_env.HOME }}/.config/anyenv/anyenv-install"
+
+- name: add anyenv to bashrc
+  blockinfile:
+    marker: '# {mark} ANSIBLE ANYENV MANAGED BLOCK'
+    path: "{{ ansible_env.HOME }}/.profile"
+    content: |
+      export PATH="{{ anyenv.dir }}/bin:$PATH"
+      eval "$(anyenv init -)"
+
+- name: install env
+  loop: "{{ anyenv_envs }}"
+  command: bash -l -c "anyenv install {{ item }} --skip-existing"
+  args:
+    creates: "{{ anyenv.dir }}/envs/{{ item }}"
