@@ -7,9 +7,15 @@
     path: "{{ jupyter_notebook_dir }}"
     state: directory
 
+- name: initialize os packages
+  include_tasks: _os_specific.yml
+  vars:
+    base_task_name: _initialize
+  when: jupyter_kernels | length < 1
+
 - name: install kernels
   include_tasks: "{{ kernel }}.yml"
-  with_items: "{{ jupyter_kernels }}"
+  loop: "{{ jupyter_kernels }}"
   loop_control:
     loop_var: kernel
     label: "{{ kernel }}"
@@ -20,35 +26,34 @@
     dest: "{{ jupyter_data_dir.stdout }}/nbextensions/vim_binding"
 
 - name: enable jupyter extentions
-  command: "bash -l -c 'jupyter nbextension enable {{ item }}'"
-  with_items: "{{ jupyter_extentions }}"
+  command: bash -l -c "jupyter nbextension enable {{ item }}"
+  loop: "{{ jupyter_extentions }}"
 
 - name: clone storage of jupyter notebooks
+  when: jupyter_notebook_storage_repo is defined
   git:
     repo: "{{ jupyter_notebook_storage_repo }}"
     dest: "{{ jupyter_notebook_storage_dir }}"
     update: no
     force: no
-  when: jupyter_notebook_storage_repo is defined
 
 - name: setup git config to clean ipynb
+  when: jupyter_notebook_storage_repo is defined
   blockinfile:
     path: "{{ jupyter_notebook_storage_dir }}/.git/{{ item.file }}"
     create: yes
     block: |
       {{ item.content }}
-  with_items:
-  - "{{ jupyter_notebook_storage_gitconfig }}"
-  when: jupyter_notebook_storage_repo is defined
+  loop: "{{ jupyter_notebook_storage_gitconfig }}"
 
 - name: create jupyter storage
+  when: jupyter_notebook_storage_repo is not defined
   file:
     path: "{{ jupyter_notebook_storage_dir }}"
     state: directory
-  when: jupyter_notebook_storage_repo is not defined
 
 - name: put jupyter's run.sh
-  with_items:
+  loop:
     - f: jupyter-run.sh
       d: "{{ jupyter_notebook_dir }}/run.sh"
       m: '0744'
@@ -61,7 +66,7 @@
 
 - name: put jupyter.service
   become: yes
-  with_items:
+  loop:
     - f: jupyter.service
       d: /etc/systemd/system
   template:
