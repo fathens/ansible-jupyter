@@ -7,6 +7,12 @@
     path: "{{ jupyter_notebook_dir }}"
     state: directory
 
+- name: initialize os packages
+  include_tasks: _os_specific.yml
+  vars:
+    base_task_name: _initialize
+  when: jupyter_kernels | length < 1
+
 - name: install kernels
   include_tasks: "{{ kernel }}.yml"
   loop: "{{ jupyter_kernels }}"
