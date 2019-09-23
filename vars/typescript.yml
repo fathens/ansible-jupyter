@@ -1,0 +1,6 @@
+anyenv:
+  repo: https://github.com/anyenv/anyenv 
+  version: master
+  dir: "{{ ansible_env.HOME }}/.anyenv"
+
+nodejs_version: 10.16.3

@@ -1,0 +1,37 @@
+- include_tasks: _init_each.yml
+
+- name: install anyenv
+  include_tasks: _anyenv.yml
+  vars:
+    anyenv_envs:
+    - nodenv
+
+- name: get nodenv root
+  command: bash -l -c "nodenv root"
+  register: nodenv_root
+
+- name: create default-packages
+  file:
+    path: "{{ nodenv_root.stdout }}/default-packages"
+    stat: directory
+
+- name: install nodejs-"{{ nodejs_version }}"
+  when: npm_check is failed
+  command: bash -l -c "nodenv install --skip-existing {{ nodejs_version }}"
+  args:
+    creates: "{{ anyenv.dir }}/envs/nodenv/versions/{{ nodejs_version }}"
+
+- name: set nodejs-{{ nodejs_version }} to use
+  lineinfile:
+    dest: "{{ jupyter_notebook_dir }}/.node-version"
+    regex: "^.*$"
+    line: "{{ nodejs_version }}"
+    create: yes
+
+- name: install ITypescript
+  command: bash -l -c "{{ item }}"
+  args:
+    chdir: "{{ jupyter_notebook_dir }}"
+  loop:
+  - npm install -g itypescript
+  - its --install=local
