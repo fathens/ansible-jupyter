@@ -4,3 +4,7 @@ anyenv:
   dir: "{{ ansible_env.HOME }}/.anyenv"
 
 nodejs_version: 10.16.3
+
+itypescript:
+  repo: https://github.com/nearbydelta/itypescript.git
+  version: master

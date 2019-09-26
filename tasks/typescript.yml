@@ -13,15 +13,14 @@
 - name: create default-packages
   file:
     path: "{{ nodenv_root.stdout }}/default-packages"
-    stat: directory
+    state: touch
 
-- name: install nodejs-"{{ nodejs_version }}"
-  when: npm_check is failed
+- name: "install nodejs-{{ nodejs_version }}"
   command: bash -l -c "nodenv install --skip-existing {{ nodejs_version }}"
   args:
     creates: "{{ anyenv.dir }}/envs/nodenv/versions/{{ nodejs_version }}"
 
-- name: set nodejs-{{ nodejs_version }} to use
+- name: "set nodejs-{{ nodejs_version }} to use"
   lineinfile:
     dest: "{{ jupyter_notebook_dir }}/.node-version"
     regex: "^.*$"
@@ -33,5 +32,5 @@
   args:
     chdir: "{{ jupyter_notebook_dir }}"
   loop:
-  - npm install -g itypescript
+  - "npm install -g {{ itypescript.repo }}#{{ itypescript.version }}"
   - its --install=local
