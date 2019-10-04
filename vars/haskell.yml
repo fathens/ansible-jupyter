@@ -1,7 +1,7 @@
 ihaskell:
   repo: https://github.com/gibiansky/IHaskell.git
   version: master
-  dir: "{{ ansible_env.HOME }}/devel/workspace/IHaskell"
+  dir: "{{ workspace_dir }}/IHaskell"
 
 haskell_stack_resolver: lts-14.6
 
