@@ -1,9 +1,21 @@
+- set_fact:
+    all_packages:
+    - jq
+
+- name: appending packages
+  include_tasks: _os_specific.yml
+  vars:
+    base_task_name: _collect
+  loop: "{{ jupyter_kernels }}"
+  loop_control:
+    loop_var: kernel
+
 - name: Add apt keys
   become: yes
   apt_key:
     keyserver: "{{ ap.value }}"
     id: "{{ ap.key }}"
-  loop: "{{ apt_keys | default({}) | dict2items }}"
+  loop: "{{ all_apt_keys | default([]) | unique }}"
   loop_control:
     loop_var: ap
 
@@ -11,15 +23,12 @@
   become: yes
   apt_repository:
     repo: "{{ ap }}"
-  loop: "{{ apt_repos | default([]) }}"
+  loop: "{{ all_apt_repos | default([]) | unique }}"
   loop_control:
     loop_var: ap
-
-- set_fact:
-    packages: "{{ packages | default([]) }} + ['jq']"
 
 - name: apt install
   become: yes
   apt:
-    name: "{{ packages }}"
+    name: "{{ all_packages | default([]) | unique }}"
     update_cache: yes

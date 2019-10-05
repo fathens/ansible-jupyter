@@ -1,3 +1,16 @@
+- set_fact:
+    all_packages:
+    - git
+    - jq
+
+- name: appending packages
+  include_tasks: _os_specific.yml
+  vars:
+    base_task_name: _collect
+  loop: "{{ jupyter_kernels }}"
+  loop_control:
+    loop_var: kernel
+
 - name: yum EPEL and update
   become: yes
   yum:
@@ -6,12 +19,9 @@
     state: latest
     update_cache: yes
 
-- set_fact:
-    packages: "{{ packages | default([]) }} + ['git', 'jq']"
-
 - name: install yum packages
   become: yes
   yum:
-    name: "{{ packages }}"
+    name: "{{ all_packages | default([]) | unique }}"
     state: latest
     update_cache: yes

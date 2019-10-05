@@ -11,7 +11,6 @@
   include_tasks: _os_specific.yml
   vars:
     base_task_name: _initialize
-  when: jupyter_kernels | length < 1
 
 - name: install kernels
   include_tasks: "{{ kernel }}.yml"
@@ -81,6 +80,7 @@
     systemctl daemon-reload
     systemctl restart jupyter.service
 
-- include_tasks: _os_specific.yml
+- name: tidyup os packages
+  include_tasks: _os_specific.yml
   vars:
     base_task_name: _tidyup
