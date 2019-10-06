@@ -1,12 +1,6 @@
-- include_vars: '{{ item }}'
-  with_first_found:
-  - files:
-    - "{{ kernel }}-{{ ansible_distribution }}-{{ ansible_distribution_release }}.yml"
-    - "{{ kernel }}-{{ ansible_distribution }}.yml"
-    - "{{ kernel }}-{{ ansible_os_family }}.yml"
-    skip: true
-    paths:
-    - "{{ role_path }}/vars"
+- include_tasks: _os_vars.yml
+  vars:
+    base_task_name: "{{ kernel }}"
 
 - set_fact:
     all_packages: "{{ all_packages | default([]) }} + {{ packages | default([]) }}"

@@ -1,5 +1,5 @@
 - include_vars: "{{ kernel }}.yml"
 
-- include_tasks: _os_specific.yml
+- include_tasks: _os_tasks.yml
   vars:
     base_task_name: "{{ kernel }}"

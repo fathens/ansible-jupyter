@@ -8,7 +8,7 @@
     state: directory
 
 - name: initialize os packages
-  include_tasks: _os_specific.yml
+  include_tasks: _os_tasks.yml
   vars:
     base_task_name: _initialize
 
@@ -81,6 +81,6 @@
     systemctl restart jupyter.service
 
 - name: tidyup os packages
-  include_tasks: _os_specific.yml
+  include_tasks: _os_tasks.yml
   vars:
     base_task_name: _tidyup

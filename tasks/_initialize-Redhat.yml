@@ -4,7 +4,7 @@
     - jq
 
 - name: appending packages
-  include_tasks: _os_specific.yml
+  include_tasks: _os_tasks.yml
   vars:
     base_task_name: _collect
   loop: "{{ jupyter_kernels }}"
