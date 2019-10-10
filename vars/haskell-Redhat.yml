@@ -1,5 +1,6 @@
 packages:
 - "@Development tools"
+- file-devel
 - lapack-devel
 - ncurses-devel
 - zeromq-devel
