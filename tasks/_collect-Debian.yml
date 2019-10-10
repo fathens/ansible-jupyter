@@ -1,0 +1,10 @@
+- include_tasks: _os_vars.yml
+  vars:
+    base_task_name: "{{ kernel }}"
+
+- set_fact:
+    all_apt_keys: "{{ all_apt_keys | default([]) }} + {{ apt_keys | default({}) | dict2items }}"
+- set_fact:
+    all_apt_repos: "{{ all_apt_repos | default([]) }} + {{ apt_repos | default([]) }}"
+- set_fact:
+    all_packages: "{{ all_packages | default([]) }} + {{ packages | default([]) }}"

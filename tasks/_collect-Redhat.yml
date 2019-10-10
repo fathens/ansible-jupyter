@@ -1,0 +1,6 @@
+- include_tasks: _os_vars.yml
+  vars:
+    base_task_name: "{{ kernel }}"
+
+- set_fact:
+    all_packages: "{{ all_packages | default([]) }} + {{ packages | default([]) }}"
