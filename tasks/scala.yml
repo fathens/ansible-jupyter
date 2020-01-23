@@ -6,7 +6,7 @@
     creates: "{{ ansible_env.HOME }}/.sdkman"
 
 - name: update SDK_MAN
-  command: bash -il -c "sdk update"
+  command: bash -il -c "sdk selfupdate force && sdk update"
 
 - name: "install Java {{ java_version }}"
   command: bash -il -c "sdk install java {{ java_version }}"
